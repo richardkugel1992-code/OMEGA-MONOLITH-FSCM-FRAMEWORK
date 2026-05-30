@@ -1,0 +1,43 @@
+# --- OMEGA-MONOLITH: DETERMINISTIC EXCLUSION MANIFEST ---
+# Zweck: Verhinderung von Entropie-Injektion in den Git-Index.
+
+# 1. Compiler-Artefakte (Die lokale Fabrik-Rückstände)
+target/
+*.o
+*.a
+*.so
+*.lo
+*.la
+
+# 2. XOR-Vault & Kryptographische Artefakte (Niemals hochladen!)
+# Diese Dateien enthalten den verschlüsselten Zustand.
+/root/aion_total/vault/*
+!/root/aion_total/vault/.keep
+
+# 3. System-Logs & Audit-Rückstände
+*.log
+*.tmp
+*.bak
+*.swp
+*~
+# Nur Manifeste sind erlaubt, keine Roh-Logs!
+!/manifests/*.sha256
+
+# 4. SSH-Identität & Secret-Salts (Hardware-gebunden)
+# Diese dürfen niemals das System verlassen.
+.ssh/
+.config/.secret_salt
+.config/.integrity_manifest
+
+# 5. OS-Spezifische Artefakte
+.DS_Store
+Thumbs.db
+
+# 6. Cargo-Spezifisch (Rust-Toolchain)
+Cargo.lock
+# Nur wenn du die Abhängigkeiten explizit versionieren willst.
+# Ansonsten: .cargo/registry/
+
+# --- ARCHITEKTONISCHE NOTIZ ---
+# Alles, was hier nicht explizit ignoriert wird, muss dem 
+# "Zero-Entropie"-Standard entsprechen. 
